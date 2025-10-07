@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Echo — Social (by cryptitys)</title>
+  <meta name="description" content="Echo social — protótipo responsivo com área administrativa separada (mock API)." />
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <header class="top">
+      <div>
+        <div class="brand">Echo</div>
+        <div class="creator">Criador: cryptitys</div>
+      </div>
+      <div class="controls">
+        <div id="user-greeting" class="small">Convidado</div>
+        <button class="btn btn-ghost" id="btn-login">Entrar / Registrar</button>
+        <button class="btn btn-ghost" id="btn-admin-link">Área Admin (externa)</button>
+      </div>
+    </header>
+
+    <div class="layout">
+      <main>
+        <section class="panel new-post">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div style="font-weight:800">Criar post</div>
+            <div class="meta">Interaja com sua comunidade</div>
+          </div>
+
+          <input id="title" placeholder="Título (3+ chars)" maxlength="140" />
+          <textarea id="content" placeholder="Escreva algo legal... (10+ chars)" maxlength="2000"></textarea>
+          <div style="display:flex;align-items:center;gap:8px">
+            <button class="btn btn-primary" id="publish">Publicar</button>
+            <button class="btn btn-ghost" id="clear">Limpar</button>
+            <div style="margin-left:auto;color:var(--muted)">Posts: <span id="total-posts">0</span></div>
+          </div>
+        </section>
+
+        <div id="feed" class="posts"></div>
+      </main>
+
+      <aside>
+        <div class="panel">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div style="font-weight:700">Explorar</div>
+            <div class="meta">Trending</div>
+          </div>
+
+          <div style="margin-top:10px">
+            <div class="search"><input id="search" placeholder="Buscar #tags ou usuários" /></div>
+            <div id="tag-list" class="user-list"></div>
+          </div>
+        </div>
+
+        <div style="height:12px"></div>
+
+        <div class="panel">
+          <div style="font-weight:700">Comunidade</div>
+          <div id="users" class="user-list" style="margin-top:10px"></div>
+        </div>
+      </aside>
+    </div>
+
+    <footer>Protótipo por cryptitys — API falsa embutida • Mobile friendly</footer>
+  </div>
+
+  <!-- modal container -->
+  <div id="modal-root"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
