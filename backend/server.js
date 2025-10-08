@@ -377,6 +377,93 @@ app.get('/api/users/online', (req, res) => {
   
   res.json(onlineUsers);
 });
+// ===================== AUTENTICAÇÃO E USUÁRIOS ONLINE =====================
+
+// Banco de usuários em memória
+const users = [
+    { username: 'admin', password: 'admin', isAdmin: true, banned: false }
+];
+
+// Usuários online (simulado)
+let onlineUsers = [];
+
+// Health check
+app.get('/api/health', (req, res) => {
+    res.json({ status: 'ok' });
+});
+
+// Estatísticas básicas
+const database = {
+    stats: {
+        totalUsers: users.length,
+        totalPosts: 0,
+        onlineUsers: 0,
+        totalInteractions: 0
+    }
+};
+
+// ===================== REGISTRO =====================
+app.post('/api/auth/register', (req, res) => {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+        return res.status(400).json({ error: 'Campos incompletos' });
+    }
+
+    if (username.length < 3 || password.length < 3) {
+        return res.status(400).json({ error: 'Nome de usuário e senha devem ter pelo menos 3 caracteres' });
+    }
+
+    const exists = users.find(u => u.username === username);
+    if (exists) {
+        return res.status(400).json({ error: 'Usuário já existe' });
+    }
+
+    const newUser = { username, password, isAdmin: false, banned: false };
+    users.push(newUser);
+
+    // Atualiza estatísticas
+    database.stats.totalUsers = users.length;
+
+    // Adiciona usuário à lista de online
+    onlineUsers.push({ username, isAdmin: newUser.isAdmin, avatar: `https://api.dicebear.com/9.x/identicon/svg?seed=${encodeURIComponent(username)}` });
+    database.stats.onlineUsers = onlineUsers.length;
+
+    res.json({ user: newUser });
+});
+
+// ===================== LOGIN =====================
+app.post('/api/auth/login', (req, res) => {
+    const { username, password } = req.body;
+
+    const user = users.find(u => u.username === username && u.password === password);
+
+    if (!user) {
+        return res.status(400).json({ error: 'Usuário ou senha incorretos' });
+    }
+
+    // Adiciona usuário à lista de online se ainda não estiver
+    if (!onlineUsers.find(u => u.username === username)) {
+        onlineUsers.push({ username, isAdmin: user.isAdmin, avatar: `https://api.dicebear.com/9.x/identicon/svg?seed=${encodeURIComponent(username)}` });
+        database.stats.onlineUsers = onlineUsers.length;
+    }
+
+    res.json({ user });
+});
+
+// ===================== LOGOUT (simulado) =====================
+app.post('/api/auth/logout', (req, res) => {
+    const { username } = req.body;
+    onlineUsers = onlineUsers.filter(u => u.username !== username);
+    database.stats.onlineUsers = onlineUsers.length;
+    res.json({ success: true });
+});
+
+// ===================== USUÁRIOS ONLINE =====================
+app.get('/api/users/online', (req, res) => {
+    res.json(onlineUsers);
+});
+
 
 // Pesquisa de posts
 app.get('/api/posts/search', (req, res) => {
