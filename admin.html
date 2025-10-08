@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cryptitys Admin — Painel Secreto</title>
+<link rel="stylesheet" href="style.css">
+<meta name="description" content="Painel administrativo da Cryptitys v3 — controle total da rede social">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo">Cryptitys 💠 — Admin</div>
+  <nav class="nav-links">
+    <span id="admin-user">Conectando...</span>
+    <button class="btn btn-danger" id="btn-logout">Sair</button>
+  </nav>
+</header>
+
+<main class="container">
+  <section class="feed-section">
+    <div class="panel">
+      <h2>Estatísticas da Rede</h2>
+      <div>Total de usuários: <span id="stat-users">0</span></div>
+      <div>Total de posts: <span id="stat-posts">0</span></div>
+      <div>Usuários banidos: <span id="stat-banned">0</span></div>
+      <div>Admins: <span id="stat-admins">0</span></div>
+    </div>
+
+    <div class="panel">
+      <h2>Usuários</h2>
+      <div id="users-list"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Posts</h2>
+      <div id="posts-list"></div>
+    </div>
+  </section>
+</main>
+
+<!-- Modals -->
+<div id="modal-backdrop" class="modal-backdrop">
+  <div class="modal" id="modal-content"></div>
+</div>
+
+<script src="script.js"></script>
+<script>
+/* --- Admin script --- */
+(function(){
+  const adminUserEl=document.getElementById('admin-user');
+  const usersListEl=document.getElementById('users-list');
+  const postsListEl=document.getElementById('posts-list');
+  const statUsersEl=document.getElementById('stat-users');
+  const statPostsEl=document.getElementById('stat-posts');
+  const statBannedEl=document.getElementById('stat-banned');
+  const statAdminsEl=document.getElementById('stat-admins');
+
+  // Verifica se o currentUser é admin
+  if(!currentUser || !currentUser.isAdmin){
+    alert('Acesso restrito a administradores'); window.location.href='index.html'; return;
+  }
+
+  function refreshAdmin(){
+    // Estatísticas
+    statUsersEl.textContent=DB.users.length;
+    statPostsEl.textContent=DB.posts.length;
+    statBannedEl.textContent=DB.users.filter(u=>u.banned).length;
+    statAdminsEl.textContent=DB.users.filter(u=>u.isAdmin).length;
+
+    // Usuários
+    usersListEl.innerHTML=DB.users.map(u=>`
+      <div class="user-row">
+        <div>
+          <strong>${escape(u.username)}</strong> ${u.isAdmin? '(admin)':''} ${u.banned? '· banido':''}
+        </div>
+        <div style="display:flex;gap:6px">
+          ${!u.isAdmin? `<button class="btn" data-act="promote" data-user="${u.username}">Promover</button>` : ''}
+          ${u.banned? `<button class="btn" data-act="unban" data-user="${u.username}">Desbanir</button>` : `<button class="btn btn-danger" data-act="ban" data-user="${u.username}">Banir</button>`}
+          <button class="btn btn-danger" data-act="deleteuser" data-user="${u.username}">Excluir</button>
+        </div>
+      </div>
+    `).join('');
+
+    // Posts
+    postsListEl.innerHTML=DB.posts.map(p=>`
+      <div class="post" style="padding:8px;margin-bottom:6px;border-radius:12px;background:rgba(255,255,255,0.03)">
+        <strong>${escape(p.title)}</strong> — ${escape(p.username)} · ${timeAgo(p.timestamp)}
+        <div style="margin-top:4px;display:flex;gap:6px">
+          <button class="btn btn-danger" data-act="deletepost" data-id="${p.id}">Excluir</button>
+        </div>
+      </div>
+    `).join('');
+
+    // Attach user actions
+    usersListEl.querySelectorAll('[data-act]').forEach(b=>{
+      b.onclick=e=>{
+        const act=e.target.dataset.act;
+        const u=e.target.dataset.user;
+        if(act==='promote'){promoteToAdmin(u); refreshAdmin();}
+        if(act==='ban'){banUser(u); refreshAdmin();}
+        if(act==='unban'){unbanUser(u); refreshAdmin();}
+        if(act==='deleteuser'){if(confirm('Excluir usuário e posts?')){DB.users=DB.users.filter(x=>x.username!==u); DB.posts=DB.posts.filter(p=>p.username!==u); saveDB(); refreshAdmin();}}
+      }
+    });
+
+    // Attach post actions
+    postsListEl.querySelectorAll('[data-act]').forEach(b=>{
+      b.onclick=e=>{
+        const id=e.target.dataset.id;
+        if(confirm('Excluir este post?')){DB.posts=DB.posts.filter(p=>p.id!=id); saveDB(); refreshAdmin();}
+      }
+    });
+
+    adminUserEl.textContent=`Admin: ${currentUser.username}`;
+  }
+
+  // Logout
+  document.getElementById('btn-logout').onclick=()=>{logout(); window.location.href='index.html';}
+
+  refreshAdmin();
+
+  setInterval(refreshAdmin,5000); // auto refresh
+})();
+</script>
+</body>
+</html>
