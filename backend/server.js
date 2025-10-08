@@ -401,12 +401,12 @@ app.get('/api/posts/search', (req, res) => {
 
 // Rota padrão para servir o frontend
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname,'..' , 'index.html'));
 });
 
 // Rota para todas as outras requisições (SPA)
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, '..' , 'index.html'));
 });
 
 // Inicializar servidor
