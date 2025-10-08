@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cryptitys | Sua Rede Social</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+
+    <div id="alert-container" class="alert-container">
+        </div>
+
+    <header>
+        <div class="container header-content">
+            <h1 class="logo">Cryptitys</h1>
+            <div class="header-actions">
+                <div class="search-bar">
+                    <input type="text" id="search-input" placeholder="Buscar posts por título/descrição...">
+                    <button id="search-btn" class="btn btn-icon"><span class="material-icons">search</span></button>
+                    <button id="btn-clear-search" class="btn btn-icon btn-hidden"><span class="material-icons">clear</span></button>
+                </div>
+                <div id="auth-buttons">
+                    </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <aside class="sidebar">
+            <div class="stats-panel card">
+                <h3>Estatísticas</h3>
+                <p>Posts: <span id="stat-posts">0</span></p>
+                <p>Usuários: <span id="stat-users">0</span></p>
+                <p>Interações: <span id="stat-interactions">0</span></p>
+            </div>
+            <div class="online-panel card">
+                <h3>Online (<span id="stat-online">0</span>)</h3>
+                <ul id="online-users-list">
+                    </ul>
+            </div>
+        </aside>
+
+        <section class="main-content">
+            
+            <div id="create-post-panel" class="card post-form-card" style="display: none;">
+                <h2>Criar Novo Post</h2>
+                <input type="text" id="post-title" placeholder="Título (mín. 3 caracteres)" maxlength="100">
+                <textarea id="post-description" placeholder="O que você está pensando? (mín. 10 caracteres)" maxlength="500"></textarea>
+                <div class="form-actions">
+                    <span id="char-counter-post">0/500</span>
+                    <button id="btn-clear-post" class="btn btn-secondary">Limpar</button>
+                    <button id="btn-create-post" class="btn btn-primary">Postar</button>
+                </div>
+            </div>
+
+            <div class="feed-header">
+                <h2>Feed Principal</h2>
+                <div class="sort-options">
+                    <button id="sort-recent" class="btn btn-tab btn-active">Recentes</button>
+                    <button id="sort-popular" class="btn btn-tab">Populares</button>
+                </div>
+            </div>
+
+            <div id="posts-feed" class="posts-feed">
+                <p id="feed-empty-state" style="text-align: center; color: #777; margin-top: 50px;">Carregando posts...</p>
+            </div>
+
+        </section>
+    </main>
+
+    <button id="scroll-to-top-btn" class="btn btn-icon scroll-to-top-btn" title="Voltar ao topo">
+        <span class="material-icons">arrow_upward</span>
+    </button>
+
+    <div id="modal-backdrop" class="modal-backdrop" style="display: none;">
+        
+        <div id="auth-modal" class="modal-content">
+            <button class="modal-close" onclick="closeModal('auth-modal')"><span class="material-icons">close</span></button>
+            <h2 id="auth-modal-title">Login</h2>
+            
+            <form id="login-form">
+                <input type="text" id="login-username" placeholder="Nome de Usuário" minlength="3" required>
+                <input type="password" id="login-password" placeholder="Senha" minlength="3" required>
+                <button type="submit" class="btn btn-primary">Entrar</button>
+                <p class="modal-switch">Novo por aqui? <a href="#" onclick="showRegisterModal(); return false;">Crie uma conta!</a></p>
+            </form>
+
+            <form id="register-form" style="display: none;">
+                <input type="text" id="register-username" placeholder="Nome de Usuário (min 3)" minlength="3" required>
+                <input type="password" id="register-password" placeholder="Senha (min 3)" minlength="3" required>
+                <button type="submit" class="btn btn-secondary">Registrar</button>
+                <p class="modal-switch">Já tem conta? <a href="#" onclick="showLoginModal(); return false;">Fazer Login</a></p>
+            </form>
+        </div>
+
+        <div id="comments-modal" class="modal-content" style="display: none;">
+            <button class="modal-close" onclick="closeModal('comments-modal')"><span class="material-icons">close</span></button>
+            <h2>Comentários</h2>
+            <div id="comments-list" class="comments-list">
+                </div>
+            <div id="add-comment-area" class="add-comment-area">
+                <textarea id="comment-text-input" placeholder="Adicionar um comentário (mín. 1 caractere)" maxlength="200"></textarea>
+                <div class="form-actions">
+                    <span id="char-counter-comment">0/200</span>
+                    <button id="btn-add-comment" class="btn btn-primary">Comentar</button>
+                </div>
+            </div>
+            <p id="comment-login-message" class="login-message" style="display: none;">Você precisa estar logado para comentar.</p>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
