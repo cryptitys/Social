@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cryptitys v3 | Rede Social Futurista</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="description" content="Cryptitys v3 — rede social futurista, escura, interativa e responsiva">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💠</text></svg>">
+</head>
+<body>
+    <!-- Top Navbar -->
+    <header class="navbar">
+        <div class="logo">💠 Cryptitys v3</div>
+        <nav class="nav-links">
+            <button id="btn-feed" class="nav-btn active">Feed</button>
+            <button id="btn-post" class="nav-btn btn-primary">Novo Post</button>
+            <button id="btn-explore" class="nav-btn">Explorar</button>
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Pesquisar..." class="search-input">
+                <button id="btn-search" class="btn btn-small">🔍</button>
+            </div>
+            <div id="user-info" class="flex-between">
+                <span id="user-display">Visitante</span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main layout -->
+    <main class="container">
+        <!-- Feed -->
+        <section class="feed-section">
+            <div class="panel hidden" id="search-results-panel">
+                <div class="flex-between">
+                    <h3>Resultados da Pesquisa</h3>
+                    <button class="btn btn-small" id="btn-clear-search">Limpar</button>
+                </div>
+                <div id="search-results" class="posts"></div>
+            </div>
+
+            <div class="panel" id="new-post-panel">
+                <h2>✨ Criar Novo Post</h2>
+                <input id="post-title" placeholder="Título do post..." maxlength="100">
+                <textarea id="post-desc" placeholder="Escreva algo interessante..." maxlength="1000"></textarea>
+                <div class="post-actions">
+                    <button class="btn btn-primary" id="send-post">Publicar</button>
+                    <button class="btn" id="clear-post">Limpar</button>
+                    <span id="char-count" class="text-muted">0/1000</span>
+                    <span id="posts-count" class="text-muted">Posts: 0</span>
+                </div>
+            </div>
+            
+            <div class="panel flex-between">
+                <h3>📱 Feed Principal</h3>
+                <div class="feed-controls">
+                    <button class="btn btn-small" id="btn-refresh">🔄 Atualizar</button>
+                    <button class="btn btn-small active" id="btn-sort-recent">📅 Recentes</button>
+                    <button class="btn btn-small" id="btn-sort-popular">🔥 Populares</button>
+                </div>
+            </div>
+            
+            <div id="posts" class="posts">
+                <div class="panel text-center">
+                    <h3>Carregando...</h3>
+                    <p class="text-muted">Conectando ao servidor</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="panel card">
+                <h3>👤 Painel Rápido</h3>
+                <button class="btn w-100" id="btn-profile">Meu Perfil</button>
+                <button class="btn w-100" id="btn-login">Entrar</button>
+                <button class="btn w-100" id="btn-register">Registrar</button>
+                <button class="btn w-100 hidden" id="btn-logout">Sair</button>
+            </div>
+            
+            <div class="panel card">
+                <div class="flex-between mb-1">
+                    <h3>🟢 Usuários Online</h3>
+                    <span id="online-count" class="badge badge-admin">0</span>
+                </div>
+                <div id="users-online">
+                    <p class="text-muted text-center">Carregando...</p>
+                </div>
+            </div>
+            
+            <div class="panel card">
+                <h3>📊 Estatísticas</h3>
+                <div class="text-muted">
+                    <div class="flex-between">
+                        <span>Total de Posts:</span>
+                        <span id="stats-posts">0</span>
+                    </div>
+                    <div class="flex-between">
+                        <span>Total de Usuários:</span>
+                        <span id="stats-users">0</span>
+                    </div>
+                    <div class="flex-between">
+                        <span>Usuários Online:</span>
+                        <span id="stats-online">0</span>
+                    </div>
+                    <div class="flex-between">
+                        <span>Interações:</span>
+                        <span id="stats-interactions">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel card">
+                <h3>ℹ️ Sobre</h3>
+                <p class="text-muted small">
+                    Cryptitys v3 - Rede Social Futurista<br>
+                    Desenvolvido com 💜 por Cryptitys
+                </p>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <span>Cryptitys v3 — Rede Social Futurista</span>
+            <span>💠 Criado por Cryptitys</span>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <div class="scroll-to-top" id="scroll-to-top">
+        ↑
+    </div>
+
+    <!-- Modals -->
+    <div id="modal-backdrop" class="modal-backdrop">
+        <div class="modal" id="modal-content"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+          </html>
